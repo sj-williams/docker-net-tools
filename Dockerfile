@@ -13,6 +13,9 @@ RUN mkdir -p /opt/your-folder && \
     adduser --disabled-password nonRootUser -u 1001 && \
     chown -R nonRootUser:nonRootUser /opt/your-folder
 
+RUN setcap cap_net_raw+ep /usr/bin/tcpdump
+RUN setcap cap_net_raw+ep /bin/ping
+
 USER 1001
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
