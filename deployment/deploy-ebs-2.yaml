@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: net-tools-2
+  annotations:
+    test-annotation: '{"test-key":"test-value"}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: net-tools-2
+  template:
+    metadata:
+      labels:
+        app: net-tools-2
+    spec:
+      containers:
+      - name: net-tools-2
+        image: sjwilliams80/docker-net-tools:latest
+        volumeMounts:
+        - name: net-tools-pvc-2
+          mountPath: /data
+      volumes:
+        - name: net-tools-pvc-2
+          persistentVolumeClaim:
+            claimName: net-tools-pvc-2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: net-tools-pvc-2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "gp3"
+  resources:
+    requests:
+      storage: 50Gi
